@@ -9,7 +9,7 @@ import java.util.*
  * @author : imanbhlool
  * @since : Aug/10/2021 - 2:12 PM, Tuesday
  */
-data class CounterDao(
+data class CounterDao (
         val counterId: Long,
         val datetime: Date,
         val consumption: Double,
