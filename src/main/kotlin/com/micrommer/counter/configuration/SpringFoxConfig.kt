@@ -32,7 +32,7 @@ class SpringFoxConfig {
     private fun apiInfo(): ApiInfo {
         return ApiInfo(
                 "Smart Counter",
-                "A way to communicate with Smart Counter securely",
+                "A way to communicate with Smart Counters securely",
                 "v 0.1",
                 "",
                 Contact("Iman Buhlool", "", "ibhlool7@gmail.com"),

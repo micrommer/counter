@@ -1,4 +1,4 @@
-package com.micrommer.counter.model
+package com.micrommer.counter.model.common
 
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min

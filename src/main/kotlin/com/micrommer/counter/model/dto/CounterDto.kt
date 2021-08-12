@@ -1,7 +1,8 @@
 package com.micrommer.counter.model.dto
 
-import com.micrommer.counter.model.GeoLocation
-import com.micrommer.counter.model.Owner
+import com.micrommer.counter.model.common.GeoLocation
+import com.micrommer.counter.model.common.Owner
+import com.micrommer.counter.model.dao.CounterDto
 import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.Min
@@ -18,5 +19,17 @@ data class CounterDto(
         @field:Valid val geoLocation: GeoLocation,
         @field:Valid val owners: Set<Owner>,
         var active: Boolean = false
+) : DaoCompatible<CounterDto> {
+    override fun getDao(): CounterDto {
+        return CounterDto(
+                counterId,
+                datetime,
+                consumption,
+                geoLocation,
+                owners,
+                active = active
+        )
+    }
 
-)
+
+}

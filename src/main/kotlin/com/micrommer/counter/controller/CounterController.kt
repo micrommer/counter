@@ -6,4 +6,5 @@ package com.micrommer.counter.controller
  * @since : Aug/10/2021 - 3:38 PM, Tuesday
  */
 class CounterController {
+
 }

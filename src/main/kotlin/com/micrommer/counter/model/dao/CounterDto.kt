@@ -1,7 +1,7 @@
 package com.micrommer.counter.model.dao
 
-import com.micrommer.counter.model.GeoLocation
-import com.micrommer.counter.model.Owner
+import com.micrommer.counter.model.common.GeoLocation
+import com.micrommer.counter.model.common.Owner
 import java.util.*
 
 /**
@@ -9,7 +9,7 @@ import java.util.*
  * @author : imanbhlool
  * @since : Aug/10/2021 - 2:12 PM, Tuesday
  */
-data class CounterDao (
+data class CounterDto (
         val counterId: Long,
         val datetime: Date,
         val consumption: Double,

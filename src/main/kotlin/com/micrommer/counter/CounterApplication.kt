@@ -13,11 +13,9 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 
 
-
-
 @SpringBootApplication
 class CounterApplication
 
 fun main(args: Array<String>) {
-	runApplication<CounterApplication>(*args)
+    runApplication<CounterApplication>(*args)
 }
