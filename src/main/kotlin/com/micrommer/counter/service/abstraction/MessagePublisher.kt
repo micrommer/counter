@@ -1,6 +1,6 @@
 package com.micrommer.counter.service.abstraction
 
-import com.micrommer.counter.model.dao.CounterDto
+import com.micrommer.counter.model.dao.CounterDao
 
 /**
  * counter (com.micrommer.counter.service)
@@ -8,5 +8,5 @@ import com.micrommer.counter.model.dao.CounterDto
  * @since : Aug/11/2021 - 1:59 PM, Wednesday
  */
 interface MessagePublisher {
-    fun publish(counterDto: CounterDto)
+    fun publish(counterDao: CounterDao)
 }

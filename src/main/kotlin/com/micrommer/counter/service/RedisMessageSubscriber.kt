@@ -1,7 +1,7 @@
 package com.micrommer.counter.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.micrommer.counter.model.dao.CounterDto
+import com.micrommer.counter.model.dao.CounterDao
 import org.slf4j.LoggerFactory
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
@@ -20,7 +20,7 @@ class RedisMessageSubscriber(private val objectMapper: ObjectMapper) : MessageLi
     var messageList = mutableListOf<String>()
 
     override fun onMessage(p0: Message, p1: ByteArray?) {
-        val obj = objectMapper.readValue(p0.body, CounterDto::class.java)
+        val obj = objectMapper.readValue(p0.body, CounterDao::class.java)
         messageList.add(p0.toString())
         logger.info("Message received: $obj")
         logger.info(messageList.size.toString())

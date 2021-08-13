@@ -1,6 +1,6 @@
 package com.micrommer.counter.controller
 
-import com.micrommer.counter.model.dao.CounterDto
+import com.micrommer.counter.model.dao.CounterDao
 import com.micrommer.counter.service.abstraction.MessagePublisher
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -21,7 +21,7 @@ class CountersController(private val messagePublisher: MessagePublisher) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@Valid @RequestBody counter: CounterDto) {
+    fun create(@Valid @RequestBody counter: CounterDao) {
         messagePublisher.publish(counter)
     }
 }
