@@ -1,13 +1,12 @@
 package com.micrommer.counter.controller
 
 import com.micrommer.counter.model.dto.RecordDto
+import com.micrommer.counter.service.CounterService
 import com.micrommer.counter.service.abstraction.MessagePublisher
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 /**
@@ -17,12 +16,18 @@ import javax.validation.Valid
  */
 @Controller
 @RequestMapping("/counter")
-class CounterController(private val messagePublisher: MessagePublisher) {
+class CounterController(private val messagePublisher: MessagePublisher,
+                        private val counterService: CounterService) {
 
     @PostMapping("/record")
-    @ResponseStatus(HttpStatus.CREATED)
     fun create(@Valid @RequestBody record: RecordDto) {
         messagePublisher.publish(record)
     }
+
+    @PatchMapping("/{counterId}/disable")
+    fun disable(@PathVariable counterId: String): ResponseEntity<*> {
+        return counterService.disableCounter(counterId)
+    }
+
 
 }

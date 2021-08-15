@@ -8,5 +8,5 @@ import com.micrommer.counter.model.dto.RecordDto
  * @since : Aug/11/2021 - 1:59 PM, Wednesday
  */
 interface MessagePublisher {
-    fun publish(counterDao: RecordDto)
+    fun publish(recordDto: RecordDto)
 }

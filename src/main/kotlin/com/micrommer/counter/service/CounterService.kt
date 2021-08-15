@@ -39,8 +39,6 @@ class CounterService(
             }
             manualCounterRepo.addRecordToCounter(record.counterId, RecordDao(record.datetime, record.consumption, record.geoLocation))
         }
-
-
     }
 
     fun addNewCounter(counterDto: CounterDto): ResponseEntity<*> {
@@ -66,8 +64,18 @@ class CounterService(
                 Thanks
             """.trimIndent()
         }
-
     }
 
-
+    fun disableCounter(counterId: String): ResponseEntity<Unit> {
+        val entity = counterRepo.findById(ObjectId(counterId))
+        return if (entity.isPresent) {
+            if (entity.get().active) {
+                entity.get().active = false
+                counterRepo.save(entity.get())
+            }
+            ResponseEntity.status(HttpStatus.OK).body(Unit)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(Unit)
+        }
+    }
 }
