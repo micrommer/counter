@@ -1,11 +1,13 @@
 package com.micrommer.counter.service
 
+import com.micrommer.counter.model.common.GeoLocation
 import com.micrommer.counter.model.dao.CounterDao
 import com.micrommer.counter.model.dao.RecordDao
 import com.micrommer.counter.model.dto.CounterDto
 import com.micrommer.counter.model.dto.RecordDto
 import com.micrommer.counter.repo.CounterRepo
 import com.micrommer.counter.repo.abstraction.ManualCounterRepo
+import com.micrommer.counter.service.abstraction.GeoLocator
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -17,7 +19,8 @@ import java.util.*
 class CounterService(
         private val counterRepo: CounterRepo,
         private val manualCounterRepo: ManualCounterRepo,
-        private val notifier: EmailNotifier
+        private val notifier: EmailNotifier,
+        private val geoLocator: GeoLocator
 ) {
     @Value("\${department.top-level.email}")
     lateinit var topLevelDepartmentEmail: String
@@ -32,9 +35,9 @@ class CounterService(
      * In case of receiving 0 consumption from an active Counter, we well notified owners.
      */
     fun addCounterRecord(record: RecordDto) {
-
         val entity = counterRepo.findById(record.counterId)
         if (entity.isPresent) {
+            locateCounter(entity.get(), record.geoLocation)
             if (!entity.get().active) {
                 notifier.notify(
                         entity.get().owners.map { owner -> return@map owner.email },
@@ -51,6 +54,14 @@ class CounterService(
             manualCounterRepo.addRecordToCounter(record.counterId, RecordDao(record.datetime, record.consumption, record.geoLocation))
         } else {
             notifier.notify(listOf(topLevelDepartmentEmail), messageGenerator(MessageTopic.DOES_NOT_EXIST_RECEIVED))
+        }
+    }
+
+    private fun locateCounter(counter: CounterDao, geo: GeoLocation) {
+        val expiration = counter.lastGeoUpdate?.before(geoLocator.lastUpdate()) ?: true
+        if (counter.lastGeoLocationId == null || expiration) {
+            val geoLocationId = geoLocator.getRelatedZoneId(geo.latitude, geo.longitude)
+            manualCounterRepo.addGeoLocationId(counter.counterId, geoLocationId)
         }
     }
 

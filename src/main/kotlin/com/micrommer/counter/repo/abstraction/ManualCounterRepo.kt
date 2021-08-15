@@ -10,4 +10,5 @@ import org.bson.types.ObjectId
  */
 interface ManualCounterRepo {
     fun addRecordToCounter(counterId: ObjectId, recordDao: RecordDao)
+    fun addGeoLocationId(counterId: ObjectId, geoLocationId: ObjectId)
 }

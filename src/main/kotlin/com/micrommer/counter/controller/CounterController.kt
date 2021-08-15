@@ -5,6 +5,7 @@ import com.micrommer.counter.service.CounterService
 import com.micrommer.counter.service.abstraction.MessagePublisher
 import org.springframework.beans.propertyeditors.CustomDateEditor
 import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.WebDataBinder
@@ -40,6 +41,7 @@ class CounterController(private val messagePublisher: MessagePublisher,
     }
 
     @PostMapping("/record")
+    @ResponseStatus(HttpStatus.CREATED)
     fun create(@Valid @RequestBody record: RecordDto) {
         messagePublisher.publish(record)
     }

@@ -19,7 +19,7 @@ data class CounterDao(
         val counterId: ObjectId,
         val owners: Set<Owner>,
         val records: Set<RecordDao>,
-        var lastGeoLocation: GeoLocation? = null,
+        var lastGeoLocationId: ObjectId? = null,
         var lastGeoUpdate: Date? = null,
         var active: Boolean = true
 )

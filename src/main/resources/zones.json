@@ -9,7 +9,7 @@
       "maximumUsage": 3.2,
       "lat": 31.715298,
       "long": 51.404343,
-      "area": 60455.12,
+      "area": 55.12,
       "consumption": [
         {
           "firstHalfOfYear": {
@@ -96,7 +96,7 @@
   "maximumUsage": 2.4,
   "lat": 31.897423,
   "long": 54.356857,
-  "area": 504555.4079896372,
+  "area": 504555.407,
   "consumption": [
     {
       "firstHalfOfYear": {

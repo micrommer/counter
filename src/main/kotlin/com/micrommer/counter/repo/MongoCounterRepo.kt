@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
+import java.util.*
 
 /**
  * counter (com.micrommer.counter.repo)
@@ -23,6 +24,15 @@ class MongoCounterRepo(private val mongo: MongoTemplate) : ManualCounterRepo {
         mongo.updateFirst(
                 Query.query(Criteria.where(CounterDao::counterId.name).`is`(counterId)),
                 Update().addToSet(CounterDao::records.name, recordDao),
+                CounterDao::class.java
+        )
+    }
+
+    override fun addGeoLocationId(counterId: ObjectId, geoLocationId: ObjectId) {
+        mongo.updateFirst(
+                Query.query(Criteria.where(CounterDao::counterId.name).`is`(counterId)),
+                Update().set(CounterDao::lastGeoLocationId.name, geoLocationId)
+                        .set(CounterDao::lastGeoUpdate.name, Date()),
                 CounterDao::class.java
         )
     }
