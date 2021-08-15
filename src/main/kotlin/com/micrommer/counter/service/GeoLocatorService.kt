@@ -121,15 +121,14 @@ class GeoLocatorService(@Qualifier("webApplicationContext")
                 break
             }
             for (item in (zoneLevel?.get("child") as ArrayNode)) {
-                val area = json.get()?.get("area")?.asDouble() ?: 0.0
-                val zoneLat = json.get()?.get("lat")?.asDouble() ?: 0.0
-                val zoneLong = json.get()?.get("long")?.asDouble() ?: 0.0
+                val area = item?.get("area")?.asDouble() ?: 0.0
+                val zoneLat = item?.get("lat")?.asDouble() ?: 0.0
+                val zoneLong = item?.get("long")?.asDouble() ?: 0.0
                 if (distFrom(lat, long, zoneLat, zoneLong) <= area) {
                     zoneLevel = item
                     flag = false
                     break
                 }
-
             }
             if (flag) {
                 break
