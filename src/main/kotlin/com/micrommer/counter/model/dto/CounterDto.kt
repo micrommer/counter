@@ -1,11 +1,11 @@
 package com.micrommer.counter.model.dto
 
-import com.micrommer.counter.model.common.GeoLocation
+import com.micrommer.counter.model.util.ObjectIdToString
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.micrommer.counter.model.common.Owner
-import com.micrommer.counter.model.dao.CounterRecord
-import java.util.*
+import org.bson.types.ObjectId
 import javax.validation.Valid
-import javax.validation.constraints.Min
 
 /**
  * counter (com.micrommer.counter.model.dto)
@@ -13,18 +13,11 @@ import javax.validation.constraints.Min
  * @since : Aug/10/2021 - 1:11 PM, Tuesday
  */
 data class CounterDto(
-    @field:Min(1) val counterId: Long,
-    val datetime: Date,
-    @field:Min(0) val consumption: Double,
-    @field:Valid val geoLocation: GeoLocation,
-    @field:Valid val owners: Set<Owner>,
-    var active: Boolean = false
-) : DaoCompatible<CounterRecord> {
-    override fun getDao(): CounterRecord {
-        return CounterRecord(
-            this.datetime,
-            this.consumption,
-            this.geoLocation
-        )
-    }
-}
+        @field:JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @field:JsonSerialize(using = ObjectIdToString::class)
+        var counterId: ObjectId? = null,
+        @field:Valid
+        val owners: Set<Owner>,
+        @field:JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        val active: Boolean? = null
+)

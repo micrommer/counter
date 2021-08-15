@@ -2,6 +2,8 @@ package com.micrommer.counter.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.micrommer.counter.model.dao.CounterDao
+import com.micrommer.counter.model.dto.CounterDto
+import com.micrommer.counter.model.dto.RecordDto
 import com.micrommer.counter.service.abstraction.MessagePublisher
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.listener.ChannelTopic
@@ -20,8 +22,8 @@ class RedisMessagePublisher(
         private val topic: ChannelTopic,
         private val objectMapper: ObjectMapper
 ) : MessagePublisher {
-    override fun publish(counterDao: CounterDao) {
-        val mapped = objectMapper.writeValueAsString(counterDao)
+    override fun publish(recordDto: RecordDto) {
+        val mapped = objectMapper.writeValueAsString(recordDto)
         redisTemplate.convertAndSend(topic.topic, mapped)
     }
 }

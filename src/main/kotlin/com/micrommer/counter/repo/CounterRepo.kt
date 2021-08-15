@@ -5,5 +5,5 @@ import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.MongoRepository
 
 interface CounterRepo : MongoRepository<CounterDao, ObjectId> {
-    fun findByCounterId(counterId : Long) : CounterDao
+
 }
