@@ -1,5 +1,6 @@
 package com.micrommer.counter.model.dto
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.micrommer.counter.model.common.GeoLocation
 import com.micrommer.counter.model.dao.RecordDao
@@ -17,6 +18,7 @@ import javax.validation.constraints.Min
 data class RecordDto(
         @field:JsonSerialize(using = ObjectIdToString::class)
         val counterId: ObjectId,
+        @field:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
         val datetime: Date,
         @field:Min(0)
         val consumption: Double,

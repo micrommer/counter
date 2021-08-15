@@ -121,8 +121,8 @@ class CounterService(
     }
 
     fun getBilling(counterId: String, fromDate: Date, toDate: Date): ResponseEntity<*> {
-        val counter = counterRepo.findById(ObjectId(counterId))
-        return ResponseEntity.ok(Unit)
+        val records = manualCounterRepo.getRecords(ObjectId(counterId), fromDate, toDate)
+        return ResponseEntity.ok(records)
 
     }
 }

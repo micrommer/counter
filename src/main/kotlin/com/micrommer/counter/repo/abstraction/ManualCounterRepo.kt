@@ -2,6 +2,7 @@ package com.micrommer.counter.repo.abstraction
 
 import com.micrommer.counter.model.dao.RecordDao
 import org.bson.types.ObjectId
+import java.util.*
 
 /**
  * counter (com.micrommer.counter.repo.abstraction)
@@ -11,4 +12,5 @@ import org.bson.types.ObjectId
 interface ManualCounterRepo {
     fun addRecordToCounter(counterId: ObjectId, recordDao: RecordDao)
     fun addGeoLocationId(counterId: ObjectId, geoLocationId: ObjectId)
+    fun getRecords(counterId: ObjectId,fromDate : Date, toDate : Date) : List<RecordDao>
 }
