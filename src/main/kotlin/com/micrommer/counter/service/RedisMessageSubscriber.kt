@@ -18,16 +18,9 @@ import org.springframework.stereotype.Service
 @Service
 class RedisMessageSubscriber(private val objectMapper: ObjectMapper,
                              private val counterService: CounterService) : MessageListener {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    var messageList = mutableListOf<String>()
 
     override fun onMessage(p0: Message, p1: ByteArray?) {
         val obj = objectMapper.readValue(p0.body, RecordDto::class.java)
-        messageList.add(p0.toString())
-        logger.info("Message received: $obj")
-        logger.info(messageList.size.toString())
-
         counterService.addCounterRecord(obj)
     }
 }

@@ -26,7 +26,7 @@ import kotlin.math.*
  * @author : imanbhlool
  * @since : Aug/15/2021 - 5:39 PM, Sunday
  */
-
+// Concrete Implementation
 @Service
 class GeoLocatorService(@Qualifier("webApplicationContext")
                         private val resourceLoader: ResourceLoader,
@@ -51,16 +51,33 @@ class GeoLocatorService(@Qualifier("webApplicationContext")
         }
     }
 
+    /**
+     * Load json : Load Json file and maps it to a tree
+     *
+     * @return
+     */
     private fun loadJson(): JsonNode {
         val res = resourceLoader.getResource(fileName)
         return objectMapper.readTree(res.inputStream)
     }
 
+    /**
+     * Persist in db : Commit Json's elements to Database
+     *
+     * @param node
+     */
     private fun persistInDb(node: ObjectNode) {
         val dao = serializer(node)
         zoneRepo.insert(dao)
     }
 
+    /**
+     * Serializer : Serializes each element to Kotlin Data Class, Be careful this method has a strong dependency with
+     * Json file structure
+     *
+     * @param node
+     * @return
+     */
     private fun serializer(node: ObjectNode): ZoneDao {
         return ZoneDao(
                 ObjectId(),
@@ -97,6 +114,15 @@ class GeoLocatorService(@Qualifier("webApplicationContext")
         func(node)
     }
 
+    /**
+     * Dist from: Calculates distance between two point
+     *
+     * @param lat1
+     * @param lng1
+     * @param lat2
+     * @param lng2
+     * @return
+     */
     fun distFrom(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
         val earthRadius = 6371000.0 //meters
         val dLat = toRadians((lat2 - lat1))
@@ -108,10 +134,22 @@ class GeoLocatorService(@Qualifier("webApplicationContext")
         return (earthRadius * c)
     }
 
+    /**
+     * Last update : Returns last Json update date, for keeps data sync
+     *
+     * @return
+     */
     override fun lastUpdate(): Date {
         return SimpleDateFormat("yyyy-MM-dd").parse(lastUpdate)
     }
 
+    /**
+     * Get related zone id: Traverses tree to find best match, it resolves hierarchy-ish structure of calculation
+     *
+     * @param lat
+     * @param long
+     * @return
+     */
     override fun getRelatedZoneId(lat: Double, long: Double): ObjectId {
         val json = SoftReference(loadJson())
         var zoneLevel: JsonNode? = json.get()

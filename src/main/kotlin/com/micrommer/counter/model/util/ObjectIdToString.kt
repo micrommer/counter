@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import org.bson.types.ObjectId
 
 /**
- * Ashiyane: Flare (co.ashiyane.flare.utils)
  * @author : iman
  * @since : 7/13/2020, Mon
  *

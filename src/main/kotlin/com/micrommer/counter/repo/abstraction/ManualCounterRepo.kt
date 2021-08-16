@@ -13,4 +13,5 @@ interface ManualCounterRepo {
     fun addRecordToCounter(counterId: ObjectId, recordDao: RecordDao)
     fun addGeoLocationId(counterId: ObjectId, geoLocationId: ObjectId)
     fun getRecords(counterId: ObjectId,fromDate : Date, toDate : Date) : List<RecordDao>
+    fun getLastGeoLocation(counterId: ObjectId) : ObjectId
 }

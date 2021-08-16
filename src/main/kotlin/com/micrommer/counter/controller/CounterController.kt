@@ -1,8 +1,12 @@
 package com.micrommer.counter.controller
 
+import com.micrommer.counter.model.dto.BillingDto
 import com.micrommer.counter.model.dto.RecordDto
 import com.micrommer.counter.service.CounterService
 import com.micrommer.counter.service.abstraction.MessagePublisher
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.springframework.beans.propertyeditors.CustomDateEditor
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -42,16 +46,22 @@ class CounterController(private val messagePublisher: MessagePublisher,
 
     @PostMapping("/record")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Add a new record", notes = "Submit a new record and the record will manipulate asynchronous, so the response is not accurate")
     fun create(@Valid @RequestBody record: RecordDto) {
         messagePublisher.publish(record)
     }
 
     @PatchMapping("/{counterId}/disable")
-    fun disable(@PathVariable counterId: String): ResponseEntity<*> {
+    @ApiOperation(value = "Disable a Counter", notes = "Disable a counter and in case of it is already disabled, does noting")
+    @ApiResponses(
+            ApiResponse(code = 404, message = "Not Found")
+    )
+    fun disable(@PathVariable counterId: String): ResponseEntity<Unit> {
         return counterService.disableCounter(counterId)
     }
 
     @GetMapping("/{counterId}/records/billing")
+    @ApiOperation(value = "Expose a billing", notes = "Calculate and expose a billing based on the dates")
     fun getBilling(@PathVariable
                    counterId: String,
                    @RequestParam(value = "fromDate")
@@ -59,7 +69,7 @@ class CounterController(private val messagePublisher: MessagePublisher,
                    fromDate: Date,
                    @RequestParam(value = "toDate", required = false, defaultValue = "today")
                    @DateTimeFormat(pattern = "yyyy-MM-dd")
-                   toDate: Date = Date()): ResponseEntity<*> {
+                   toDate: Date = Date()): ResponseEntity<BillingDto> {
         return counterService.getBilling(counterId, fromDate, toDate)
     }
 

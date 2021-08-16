@@ -3,6 +3,7 @@ package com.micrommer.counter.service
 import com.micrommer.counter.service.abstraction.Notifier
 import org.springframework.stereotype.Service
 
+// Concrete Implementation
 @Service
 class EmailNotifier : Notifier {
     private val color = "\u001B[34m"

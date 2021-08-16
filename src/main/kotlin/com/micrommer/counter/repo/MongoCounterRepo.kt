@@ -4,6 +4,7 @@ import com.micrommer.counter.model.dao.CounterDao
 import com.micrommer.counter.model.dao.RecordDao
 import com.micrommer.counter.model.dto.RecordDto
 import com.micrommer.counter.repo.abstraction.ManualCounterRepo
+import org.bson.Document
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.MongoCollectionUtils
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -19,7 +20,7 @@ import java.util.*
  * @author : imanbhlool
  * @since : Aug/14/2021 - 3:07 PM, Saturday
  */
-
+//Concrete Implementation
 @Service
 class MongoCounterRepo(private val mongo: MongoTemplate) : ManualCounterRepo {
 
@@ -59,14 +60,30 @@ class MongoCounterRepo(private val mongo: MongoTemplate) : ManualCounterRepo {
 
         val aggregation = Aggregation.newAggregation(aggregationStages)
 
-        println(aggregation.toString())
-
         val res = mongo.aggregate(
                 aggregation,
                 MongoCollectionUtils.getPreferredCollectionName(CounterDao::class.java),
                 RecordDao::class.java
         )
         return res.mappedResults
+    }
+
+    override fun getLastGeoLocation(counterId: ObjectId): ObjectId {
+        val idCriteria = Criteria.where("_id").`is`(counterId)
+        val projectionStage = Aggregation.project().andInclude("lastGeoLocationId")
+                .andExclude("_id")
+        val aggregationStages = listOf(
+                Aggregation.match(idCriteria),
+                projectionStage
+        )
+        val aggregation = Aggregation.newAggregation(aggregationStages)
+        val res = mongo.aggregate(
+                aggregation,
+                MongoCollectionUtils.getPreferredCollectionName(CounterDao::class.java),
+                Document::class.java
+        )
+        return ObjectId(res.uniqueMappedResult?.get("lastGeoLocationId").toString())
+
     }
 
 }
